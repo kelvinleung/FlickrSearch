@@ -32,3 +32,30 @@ class FlickrCell: UICollectionViewCell {
         super.init(coder: aDecoder)
     }
 }
+
+class FlickrPhotoHeaderView: UICollectionReusableView {
+    
+    let sectionLabel: UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.text = "Hello"
+        label.backgroundColor = UIColor(white: 0.95, alpha: 1)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.addSubview(sectionLabel)
+        
+        sectionLabel.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        sectionLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        sectionLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        sectionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}

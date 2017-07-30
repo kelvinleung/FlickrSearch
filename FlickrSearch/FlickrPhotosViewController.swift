@@ -10,7 +10,8 @@ import UIKit
 
 class FlickrPhotosViewController: UICollectionViewController {
     
-    fileprivate let reuseIdentifier = "FlickrCell"
+    fileprivate let cellId = "FlickrCell"
+    fileprivate let cellHeaderId = "FlickrCellHeader"
     fileprivate let sectionInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
     fileprivate var searches = [FlickrSearchResults]()
     fileprivate let flickr = Flickr()
@@ -18,7 +19,8 @@ class FlickrPhotosViewController: UICollectionViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.register(FlickrCell.self, forCellWithReuseIdentifier: reuseIdentifier)
+        collectionView?.register(FlickrCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView?.register(FlickrPhotoHeaderView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: cellHeaderId)
         collectionView?.backgroundColor = UIColor.white
         collectionView?.alwaysBounceVertical = true
         
@@ -85,11 +87,27 @@ extension FlickrPhotosViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
         if let flickrCell = cell as? FlickrCell {
             flickrCell.photo.image = photoForIndexPath(indexPath: indexPath).thumbnail
         }
         return cell
+    }
+}
+
+// Mark: Cell Header
+extension FlickrPhotosViewController {
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionElementKindSectionHeader:
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: cellHeaderId, for: indexPath)
+            if let cellHeader = header as? FlickrPhotoHeaderView {
+                cellHeader.sectionLabel.text = searches[indexPath.section].searchTerm
+            }
+            return header
+        default:
+            assert(false)
+        }
     }
 }
 
@@ -107,5 +125,9 @@ extension FlickrPhotosViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return sectionInsets.left
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: view.frame.width, height: 36)
     }
 }
