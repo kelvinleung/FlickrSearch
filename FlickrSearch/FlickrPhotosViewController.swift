@@ -24,7 +24,7 @@ class FlickrPhotosViewController: UICollectionViewController {
         collectionView?.backgroundColor = UIColor.white
         collectionView?.alwaysBounceVertical = true
         
-        let searchTextField = UITextField()
+        let searchTextField = UITextField(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height))
         searchTextField.placeholder = "Search"
         searchTextField.delegate = self
         self.navigationItem.titleView = searchTextField
